@@ -4,7 +4,8 @@
   "description": "backend practice project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "node",
@@ -16,5 +17,11 @@
   "devDependencies": {
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2"
-  }
+  },
+  "dependencies": {
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.1"
+  },
+  "type":"module"
 }
