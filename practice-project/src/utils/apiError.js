@@ -8,7 +8,7 @@ class apiError extends Error {
         super(message) // the built-in js Error class only takes one parameter and thay is message.
         this.statusCode = statusCode
         this.data = null
-        this.message = message
+        // this.message = message
         this.success = false
         this.errors = errors
 
@@ -16,7 +16,6 @@ class apiError extends Error {
             this.stack = stack
         }
         else{
-            console.log(Error);
             Error.captureStackTrace(this, this.constructor)
         }
     }
