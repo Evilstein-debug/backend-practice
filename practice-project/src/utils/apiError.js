@@ -1,11 +1,11 @@
 class apiError extends Error {
     constructor(
-        statusCode,
+        statusCode = 404,
         message = "something went wrong!",
         errors = [],
         stack = ""
     ){
-        super(message)
+        super(message) // the built-in js Error class only takes one parameter and thay is message.
         this.statusCode = statusCode
         this.data = null
         this.message = message
