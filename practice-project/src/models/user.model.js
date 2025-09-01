@@ -52,7 +52,7 @@ const userSchema = new Schema({
 //async fn is used here as this is a cryptographic process which might take time.
 userSchema.pre("save", async function(next){    //we dont use an arrow callback here as it doesn't have direct access to context which is really imp here as we have to manipulate specific fields in the db.
     if(!this.isModified("password")) return next() //if password is not modified then no need to run the code below
-    this.password = bcrypt.hash(this.password, 10)
+    this.password = await bcrypt.hash(this.password, 10)
     next()
 })
 
