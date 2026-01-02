@@ -28,22 +28,39 @@ const client = new Client({
 //         console.log(result)
 // }
 
-const addUser = async(username, email, password) => {
+// createUsersTable()
+
+// const addUser = async(username, email, password) => {
+//     try {
+//         await client.connect();
+        
+//         const result = await client.query(
+//             'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
+//             [username, email, password]
+//         );
+        
+//         console.log('User added:', result.rows[0]);
+//         return result.rows[0];
+//     } catch (err) {
+//         console.error('Error adding user:', err);
+//     }
+// }
+
+// addUser('user2', 'user2@gmail.com', '123456');
+
+const getUser = async(username) => {
     try {
         await client.connect();
+        const query = 'SELECT * FROM users WHERE username = $1'
+        const result = await client.query(query, [username])
         
-        const result = await client.query(
-            'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
-            [username, email, password]
-        );
-        
-        console.log('User added:', result.rows[0]);
-        return result.rows[0];
+        console.log('user:', result.rows);
+        return result.rows;
     } catch (err) {
-        console.error('Error adding user:', err);
+        console.error('Error fetching user:', err);
+    } finally {
+        await client.end();
     }
 }
 
-addUser('user2', 'user2@gmail.com', '123456');
-
-// createUsersTable()
+getUser('tejas')
