@@ -1,55 +1,49 @@
-import 'dotenv/config'
-import express from "express"
-import { title } from 'process'
+import { Client } from "pg";
+import dotenv from 'dotenv';
 
-const app = express()
+dotenv.config();
 
-app.get('/', (req,res) => {
-    res.send("hello you are on my server now!")
-})
+const client = new Client({
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
+});
 
-app.get('/x', (req,res) => {
-    res.send("@evilstein_")
-})
+// const createUsersTable = async() => {
+//     await client.connect()
+//     .then(() => console.log('Connected to PostgreSQL'))
+//     .catch(err => console.error('Connection error', err));
 
-app.get('/api/jokes', (req,res) => {
-    const jokes = [
-        {
-            id: 1,
-            title: 'A first joke',
-            content: 'This is the first joke'
+//     const result = await client.query(`
+//             CREATE TABLE users (
+//                 id SERIAL PRIMARY KEY,
+//                 username VARCHAR(50) UNIQUE NOT NULL,
+//                 email VARCHAR(250) UNIQUE NOT NULL,
+//                 password VARCHAR(250) NOT NULL,
+//                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+//             )
+//         `)
+//         console.log(result)
+// }
 
-        },
-        {
-            id: 2,
-            title: 'A second joke',
-            content: 'This is the second joke'
+const addUser = async(username, email, password) => {
+    try {
+        await client.connect();
+        
+        const result = await client.query(
+            'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
+            [username, email, password]
+        );
+        
+        console.log('User added:', result.rows[0]);
+        return result.rows[0];
+    } catch (err) {
+        console.error('Error adding user:', err);
+    }
+}
 
-        },
-        {
-            id: 3,
-            title: 'A third joke',
-            content: 'This is the third joke'
+addUser('user2', 'user2@gmail.com', '123456');
 
-        },
-        {
-            id: 4,
-            title: 'A fourth joke',
-            content: 'This is the fourth joke'
-
-        },
-        {
-            id: 5,
-            title: 'A fifth joke',
-            content: 'This is the fifth joke'
-
-        }
-    ]
-    res.send(jokes)
-})
-
-app.listen(process.env.PORT, () => {
-    console.log(`now listening on port ${process.env.PORT}`)
-})
-
-console.log(`http://localhost:${process.env.PORT}/`)
+// createUsersTable()
