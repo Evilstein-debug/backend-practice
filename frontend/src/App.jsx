@@ -30,6 +30,7 @@ function App() {
           )
         })
       }
+      <feedback-widget project-key="cml894huu00011tcrti8khn3t"></feedback-widget>
     </>
   )
 }
